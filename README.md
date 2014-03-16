@@ -1,5 +1,4 @@
-datacom-gitlab-docker
-=====================
+# Datacom's Docker Image for GitLab
 
 This Dockerfile will create a new Docker container running GitLab on Ubuntu 12.04.
 
@@ -12,7 +11,7 @@ It assumes an external MySQL database.
 External configuration can be achieved either by mapping a volume to /etc/env containing a file 'config.yml', 
 or by supplying environmental values through the Docker command line at container start time.
 
-## Building the image
+## Building the Image
 
 Datacom-gitlab-docker expects you to provide GitLab for it to add into the image, rather than pulling it from GitHub. After cloning this repository, clone https://github.com/gitlabhq/gitlabhq into gitlab, for example:
 
@@ -48,13 +47,13 @@ You must ensure that you are pointing the container at a MySQL database server w
     CREATE DATABASE IF NOT EXISTS gitlabhq_production DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 	GRANT SELECT, LOCK TABLES, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER ON gitlabhq_production.* TO 'git'@'localhost';
 	
-### Data volume
+### Data Volume
 
 You must map a volume to this container for data storage. It will contain the Git repositories, users' SSH keys, etc. You would do something like:
 
     docker run -v /var/lib/gitlab/data:/var/lib/gitlab gitlab
 
-### Putting it all together
+### Putting it All Together
 
 Here's an example of an interactive startup, using a mapped config.yml file:
 
@@ -62,13 +61,13 @@ Here's an example of an interactive startup, using a mapped config.yml file:
     
 ```-i -t``` tells Docker that you want to run it in interactive mode and request a TTY. my\_init is the init process for this container, which is run by default. However, specifying it explicity with ```-- bash``` on the end tells my\_init to run bash interactively (as well as doing its normal jobs).
 
-### First startup
+### First Startup
 
 On the first startup of the container, you will run ```rake gitlab:setup```, which will set up this empty database.
 
 You could run exactly the command above, and then run ```rake gitlab:setup``` at the bash prompt, or you could specify it as the user command instead of bash.
 
-### Normal startup
+### Normal Startup
 
 Running the container normally, daemonised, with mapped ports, would look something like this:
 
