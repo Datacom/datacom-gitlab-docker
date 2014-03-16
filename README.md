@@ -24,15 +24,54 @@ Then you're ready to build the image, e.g. ```docker build -t gitlab .```.
 
 ## Running it
 
-To run GitLab, first decide how to provide configuration to the image. Two methods are supported. The first is to supply a config.yml file by mapping it into /etc/env. For example (don't run this yet),
+Note: The ```docker run``` commands shown in this section are *not complete*, but rather are fragments each illustrating a particular aspect of the required configuration. Don't run any of them until you get to the "First Startup" and "Normal Startup" sections.
 
-    docker run -v /home/bob/apps/datacom-gitlab-docker/config:/etc/env gitlab
+### Configuration
+
+To run GitLab, first decide how to provide configuration to the image. Two methods are supported. The first is to supply a config.yml file by mapping it into /etc/env. For example,
+
+    docker run -v /var/lib/gitlab/config:/etc/env gitlab
 
 See config/config.yml.example for an example of the file.
 
 The second is to supply the configuration as environment properties through the docker run command, for example:
 
-    docker run -e GITLAB_HOST=gitlab.local -e GITLAB_PORT=8080 -e GITLAB_HTTPS=false
+```docker run -e GITLAB_HOST=gitlab.local -e GITLAB_PORT=8080 -e GITLAB_HTTPS=false -e``` (et cetera)
     
 See config/config.yml.example for the set of properties you will need to set in this way. The properties must be specified in uppercase, with underscores for nesting. For example, the database host would be called ```GITLAB_DB_HOST```.
 
+### Database
+
+You must ensure that you are pointing the container at a MySQL database server which has a database for GitLab created, and an appropriate user with appropriate permissions. For example, you could run the following:
+
+    CREATE USER 'git'@'localhost' IDENTIFIED BY 'yoursecurepassword';
+    CREATE DATABASE IF NOT EXISTS gitlabhq_production DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+	GRANT SELECT, LOCK TABLES, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER ON gitlabhq_production.* TO 'git'@'localhost';
+	
+### Data volume
+
+You must map a volume to this container for data storage. It will contain the Git repositories, users' SSH keys, etc. You would do something like:
+
+    docker run -v /var/lib/gitlab/data:/var/lib/gitlab gitlab
+
+### Putting it all together
+
+Here's an example of an interactive startup, using a mapped config.yml file:
+
+    docker run -i -t -v /var/lib/gitlab/config:/etc/env -v /var/lib/gitlab/data:/var/lib/gitlab my_init -- bash
+    
+```-i -t``` tells Docker that you want to run it in interactive mode and request a TTY. my\_init is the init process for this container, which is run by default. However, specifying it explicity with ```-- bash``` on the end tells my\_init to run bash interactively (as well as doing its normal jobs).
+
+### First startup
+
+On the first startup of the container, you will run ```rake gitlab:setup```, which will set up this empty database.
+
+You could run exactly the command above, and then run ```rake gitlab:setup``` at the bash prompt, or you could specify it as the user command instead of bash.
+
+### Normal startup
+
+Running the container normally, daemonised, with mapped ports, would look something like this:
+
+    docker run -d -v /var/lib/gitlab/config:/etc/env -v /var/lib/gitlab/data:/var/lib/gitlab -p 23:22 -p 80:80
+    
+This would expose SSH as port 23 on the host, and HTTP as port 80 on the host. Of course, there are many ways you may wish to set up your port mapping, reverse proxying, etc.
