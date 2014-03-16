@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd /home/git/gitlab
+HOME=/home/git
+
+exec chpst -u git bundle exec sidekiq -q post_receive,mailer,system_hook,project_web_hook,gitlab_shell,common,default >> /var/log/sidekiq.log 2>&1

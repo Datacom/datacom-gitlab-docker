@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd /home/git/gitlab
+HOME=/home/git
+
+exec chpst -u git bundle exec unicorn_rails -c config/unicorn.rb > /var/log/unicorn.log 2>&1

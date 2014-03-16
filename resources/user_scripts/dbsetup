@@ -1,0 +1,1 @@
+cd /home/git/gitlab && su git -c "bundle exec rake gitlab:setup"

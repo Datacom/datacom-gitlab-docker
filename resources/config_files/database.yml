@@ -1,0 +1,9 @@
+production:
+  adapter: mysql2
+  encoding: utf8
+  reconnect: false
+  database: <%= ENV['GITLAB_DB_NAME'] %>
+  pool: 10
+  username: <%= ENV['GITLAB_DB_USERNAME'] %>
+  password: <%= ENV['GITLAB_DB_PASSWORD'] %>
+  host: <%= ENV['GITLAB_DB_HOST'] %>
