@@ -1,0 +1,17 @@
+gitlab:
+  host: gitlab.local
+  port: 8080
+  https: false
+
+  email: gitlab@gitlab.local
+  support: support@gitlab.local
+  signup: true
+
+  backup_expiry: 0
+  shell_ssh_port: 22
+
+  db:
+    host: 10.0.42.1
+    name: gitlabhq_production
+    username: gitlab
+    password: password
