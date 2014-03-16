@@ -53,7 +53,7 @@ You must map a volume to this container for data storage. It will contain the Gi
 
     docker run -v /var/lib/gitlab/data:/var/lib/gitlab gitlab
 
-### Putting it All Together
+### Putting it all Together
 
 Here's an example of an interactive startup, using a mapped config.yml file:
 
