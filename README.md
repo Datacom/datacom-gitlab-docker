@@ -63,9 +63,9 @@ Here's an example of an interactive startup, using a mapped config.yml file:
 
 ### First Startup
 
-On the first startup of the container, you will run ```rake gitlab:setup```, which will set up this empty database.
+On the first startup of the container, you will run ```dbsetup```, which will set up this empty database.
 
-You could run exactly the command above, and then run ```rake gitlab:setup``` at the bash prompt, or you could specify it as the user command instead of bash.
+You could run exactly the command above, and then run ```dbsetup``` at the bash prompt, or you could specify it as the user command instead of bash.
 
 ### Normal Startup
 
