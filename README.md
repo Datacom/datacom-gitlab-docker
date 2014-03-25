@@ -43,9 +43,9 @@ See config/config.yml.example for the set of properties you will need to set in 
 
 You must ensure that you are pointing the container at a MySQL database server which has a database for GitLab created, and an appropriate user with appropriate permissions. For example, you could run the following:
 
-    CREATE USER 'git'@'localhost' IDENTIFIED BY 'yoursecurepassword';
+    CREATE USER 'gitlab'@'%' IDENTIFIED BY 'yoursecurepassword';
     CREATE DATABASE IF NOT EXISTS gitlabhq_production DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-	GRANT SELECT, LOCK TABLES, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER ON gitlabhq_production.* TO 'git'@'localhost';
+    GRANT SELECT, LOCK TABLES, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER ON gitlabhq_production.* TO 'gitlab'@'%';
 	
 ### Data Volume
 
