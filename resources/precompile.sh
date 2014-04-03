@@ -33,6 +33,8 @@ do
   timeout=$(expr $timeout - 1)
   if [ $timeout -eq 0 ]; then
     echo "Failed to start mysql server"
+    echo
+    cat /var/log/mysql_temp.log
     exit 1
   fi
   sleep 1
