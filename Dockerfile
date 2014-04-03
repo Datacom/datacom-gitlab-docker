@@ -31,9 +31,13 @@ RUN cd /home/git;\
 RUN apt-get install -y mysql-server mysql-client libmysqlclient-dev
 
 # Add GitLab
-ADD gitlab /home/git/gitlab
+# ADD gitlab /home/git/gitlab
+RUN cd /home/git;\
+  su git -c "git clone https://github.com/Datacom/gitlabhq gitlab";\
+  cd gitlab;\
+  su git -c "git checkout datacom"
 RUN cd /home/git/gitlab;\
-  su git -c "bundle install --local --deployment --without development test postgres aws"
+  su git -c "bundle install --deployment --without development test postgres aws"
 
 # Misc configuration stuff
 RUN cd /home/git/gitlab;\
